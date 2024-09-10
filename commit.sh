@@ -1,6 +1,8 @@
 #!/bin/bash
 
-REPO_PATH="$HOME/Repositories/personal/configs/dotfiles"
+git config --global --add safe.directory /home/volks/Repositories/personal/configs/dotfiles
+
+REPO_PATH="/home/volks/Repositories/personal/configs/dotfiles"
 
 cd $REPO_PATH
 
