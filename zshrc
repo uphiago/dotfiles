@@ -107,7 +107,7 @@ alias pret="npx prettier --write ."
 alias nrbd="npm install && npm run build && npm run start"
 alias nrbdi="npm install && npm run build && npm run dev"
 alias 0="xdg-open . && exit"
-alias zload="source ~/.zshrc"
+alias zload="source ~/.zshrc && bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias zconf="nano ~/.zshrc"
 alias repo="cd ~/Repositories && ls"
 alias hist="history | less"
@@ -115,7 +115,7 @@ alias now="date +'%Y-%m-%d %H:%M:%S'"
 alias tarup="tar -czvf"
 alias untar="tar -xzvf"
 alias npmglobal="npm list -g --depth 0"
-
+alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 
 
 
