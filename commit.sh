@@ -1,16 +1,6 @@
 #!/bin/bash
 
-# Iniciar o agente SSH se ele não estiver em execução
-if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-    eval "$(ssh-agent -s)"
-fi
-
-# Adicionar a chave SSH ao agente se ainda não estiver adicionada
-if ! ssh-add -l | grep -q "$(cat ~/.ssh/id_ed25519.pub)"; then
-    ssh-add ~/.ssh/id_ed25519
-fi
-
-# Adicionar o diretório como seguro para o Git
+# Adiciona o diretório como seguro para o Git
 git config --global --add safe.directory /home/volks/Repositories/personal/configs/dotfiles
 
 # Caminho para o diretório do repositório
@@ -26,4 +16,3 @@ TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 git add .
 git commit -m "Auto-commit: Atualização de arquivos de configuração em $TIMESTAMP"
 git push origin main  # ou "master", se for o seu branch principal
-
