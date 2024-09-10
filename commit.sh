@@ -1,18 +1,13 @@
 #!/bin/bash
 
-# Adiciona o diretório como seguro para o Git
 git config --global --add safe.directory /home/volks/Repositories/personal/configs/dotfiles
 
-# Caminho para o diretório do repositório
 REPO_PATH="/home/volks/Repositories/personal/configs/dotfiles"
 
-# Mude para o diretório do repositório
-cd $REPO_PATH || { echo "Erro ao mudar para o diretório $REPO_PATH"; exit 1; }
+cd $REPO_PATH || { echo "Error $REPO_PATH"; exit 1; }
 
-# Obter o timestamp atual
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 
-# Adicionar e comitar alterações com timestamp na mensagem de commit
 git add .
-git commit -m "Auto-commit: Atualização de arquivos de configuração em $TIMESTAMP"
-git push origin main  # ou "master", se for o seu branch principal
+git commit -m "Auto-commit: Config updated $TIMESTAMP"
+git push origin main
