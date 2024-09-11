@@ -116,6 +116,7 @@ alias tarup="tar -czvf"
 alias untar="tar -xzvf"
 alias npmglobal="npm list -g --depth 0"
 alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
+alias upgrade="sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}') -y && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update"
 
 
 export NVM_DIR="$HOME/.nvm"
