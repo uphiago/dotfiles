@@ -70,7 +70,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-# plugins=(git zsh-syntax-highlighting zsh-autosuggestions) 
+plugins=(git zsh-syntax-highlighting zsh-autosuggestions) 
 
 source $ZSH/oh-my-zsh.sh
 
@@ -117,7 +117,7 @@ alias untar="tar -xzvf"
 alias npmglobal="npm list -g --depth 0"
 alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias upgrade="sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}') -y && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update"
-
+alias fastpush="git add . && git commit -m . && git push"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
