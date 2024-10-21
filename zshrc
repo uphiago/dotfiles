@@ -1,6 +1,25 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-#zmodload zsh/zprof
+zmodload zsh/zprof
+
+# Enable extended globbing
+setopt EXTENDED_GLOB
+
+# Load compinit
+autoload -Uz compinit
+
+# Check if .zcompdump is older than a day
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  # Rebuild .zcompdump if older than 24 hours
+  compinit -u
+else
+  # Use existing .zcompdump without rechecking
+  compinit -C -u
+fi
+
+
+
+
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -122,8 +141,8 @@ alias fastpush="git add . && git commit -m . && git push"
 
 ###### Old nvm configs
 #export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 ###### New nvm configs
 export NVM_DIR="$HOME/.nvm"
@@ -155,11 +174,10 @@ switchNode() {
 # Add hook to automatically change version after change directory
 add-zsh-hook chpwd switchNode
 
-
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export JAVA_HOME=$(sdk home java 21.0.4-jbr)
 export PATH=$JAVA_HOME/bin:$PATH
-#zprof
+zprof
