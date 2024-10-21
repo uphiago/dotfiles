@@ -119,18 +119,41 @@ alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias upgrade="sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}') -y && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update"
 alias fastpush="git add . && git commit -m . && git push"
 
+
+###### Old nvm configs
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 #[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-lazy_nvm() {
-  unset -f nvm node npm
-  export NVM_DIR="$HOME/.nvm"
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+
+###### New nvm configs
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use
+
+#lazy loading Node from .nvmrc
+NODE_DEFAULT_PATH="${NVM_DIR}/versions/default/bin"
+PATH="${NODE_DEFAULT_PATH}:${PATH}"
+
+switchNode() {
+  local NODE_PATH TARGET_NODE_VERSION
+  if [ -f '.nvmrc' ]; then
+    TARGET_NODE_VERSION="$(nvm version $(cat .nvmrc))"
+    NODE_PATH="${NVM_DIR}/versions/node/${TARGET_NODE_VERSION}/bin"
+  else
+    TARGET_NODE_VERSION="$(nvm version default)"
+    NODE_PATH="${NODE_DEFAULT_PATH}"
+  fi
+
+  # Remove old Node.js PATH
+  PATH=$(echo $PATH | sed -e "s|${NVM_DIR}/versions/node/[^/]*/bin:||g")
+
+  # Add new NODE_PATH to PATH if =! version
+  if [ "${TARGET_NODE_VERSION}" != "$(nvm current)" ]; then
+    PATH="${NODE_PATH}:${PATH}"
+  fi
 }
 
-nvm() { lazy_nvm; nvm "$@"; }
-node() { lazy_nvm; node "$@"; }
-npm() { lazy_nvm; npm "$@"; }
+# Add hook to automatically change version after change directory
+add-zsh-hook chpwd switchNode
 
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
