@@ -2,24 +2,6 @@
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 zmodload zsh/zprof
 
-# Enable extended globbing
-setopt EXTENDED_GLOB
-
-# Load compinit
-autoload -Uz compinit
-
-# Check if .zcompdump is older than a day
-if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
-  # Rebuild .zcompdump if older than 24 hours
-  compinit -u
-else
-  # Use existing .zcompdump without rechecking
-  compinit -C -u
-fi
-
-
-
-
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -90,6 +72,14 @@ ZSH_THEME="robbyrussell"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-syntax-highlighting zsh-autosuggestions) 
+
+#####################PERFORMANCE#########################
+# Skip compaudit security checks and speed up compinit
+zstyle ':omz:plugins' disable:compinit true
+
+autoload -Uz compinit
+compinit -C -D
+########################################################
 
 source $ZSH/oh-my-zsh.sh
 
