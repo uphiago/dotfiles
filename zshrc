@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-zmodload zsh/zprof
+#zmodload zsh/zprof
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -139,4 +139,4 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 export JAVA_HOME=$(sdk home java 21.0.4-jbr)
 export PATH=$JAVA_HOME/bin:$PATH
-zprof
+#zprof
