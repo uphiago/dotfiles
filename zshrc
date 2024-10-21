@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-
+zmodload zsh/zprof
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
@@ -119,9 +119,19 @@ alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias upgrade="sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}') -y && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update"
 alias fastpush="git add . && git commit -m . && git push"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+lazy_nvm() {
+  unset -f nvm node npm
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use
+}
+
+nvm() { lazy_nvm; nvm "$@"; }
+node() { lazy_nvm; node "$@"; }
+npm() { lazy_nvm; npm "$@"; }
+
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
@@ -129,3 +139,4 @@ export SDKMAN_DIR="$HOME/.sdkman"
 
 export JAVA_HOME=$(sdk home java 21.0.4-jbr)
 export PATH=$JAVA_HOME/bin:$PATH
+zprof
