@@ -127,6 +127,7 @@ alias npmglobal="npm list -g --depth 0"
 alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias upgrade="sudo apt update && sudo apt upgrade -y && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo apt purge $(dpkg -l | grep '^rc' | awk '{print $2}') -y && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update"
 alias fastpush="git add . && git commit -m . && git push"
+alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && docker rm \$(docker ps -aq); docker rmi \$(docker images -q) -f && docker volume prune -f && docker network prune -f && docker system prune -af --volumes"
 
 
 ###### Old nvm configs
