@@ -130,6 +130,11 @@ alias fastpush="git add . && git commit -m . && git push"
 alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && docker rm \$(docker ps -aq); docker images -q | grep -q . && docker rmi \$(docker images -q) -f; docker volume prune -f && docker network prune -f && docker system prune -af --volumes"
 
 
+#Virtualbox
+alias govm1="ssh volks@127.0.0.1-p 2222"
+alias vms="VBoxManage list runningvms"
+
+
 ###### Old nvm configs
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
