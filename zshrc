@@ -131,7 +131,7 @@ alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && 
 
 
 #Virtualbox
-alias govm1="ssh volks@127.0.0.1-p 2222"
+alias govm1="ssh volks@127.0.0.1 -p 2222"
 alias vms="VBoxManage list runningvms"
 
 
