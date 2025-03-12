@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-#zmodload zsh/zprof
+zmodload zsh/zprof
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -76,6 +76,15 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 #####################PERFORMANCE#########################
 # Skip compaudit security checks and speed up compinit
 # zstyle ':omz:plugins' disable:compinit yes
+zstyle ':omz:plugins:nvm' lazy yes
+
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+	compinit;
+else
+	compinit -C;
+fi;
+
 
 # autoload -Uz compinit
 # compinit -C -D
@@ -127,18 +136,17 @@ alias npmglobal="npm list -g --depth 0"
 alias dotcommit="bash ~/Repositories/personal/configs/dotfiles/commit.sh"
 alias fastpush="git add . && git commit -m . && git push"
 alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && docker rm \$(docker ps -aq); docker images -q | grep -q . && docker rmi \$(docker images -q) -f; docker volume prune -f && docker network prune -f && docker system prune -af --volumes"
-alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall && sudo fwupdmgr refresh && sudo fwupdmgr get-updates && sudo fwupdmgr update'
+alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall'
 
 
 #Virtualbox
-alias govm1="ssh volks@127.0.0.1 -p 2222"
-alias govm1r="ssh root@127.0.0.1 -p 2222"
-alias vms="VBoxManage list runningvms"
+#alias govm1="ssh volks@127.0.0.1 -p 2222"
+#alias vms="VBoxManage list runningvms"
 
 ###### Old nvm configs
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 ###### New nvm configs
 #export NVM_DIR="$HOME/.nvm"
@@ -179,4 +187,4 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 
 
-#zprof
+zprof
