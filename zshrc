@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-zmodload zsh/zprof
+#zmodload zsh/zprof
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -78,12 +78,12 @@ plugins=(git zsh-syntax-highlighting zsh-autosuggestions)
 # zstyle ':omz:plugins' disable:compinit yes
 zstyle ':omz:plugins:nvm' lazy yes
 
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
-	compinit;
-else
-	compinit -C;
-fi;
+#autoload -Uz compinit
+#if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+#	compinit;
+#else
+#	compinit -C;
+#fi;
 
 
 # autoload -Uz compinit
@@ -187,4 +187,4 @@ export PATH=$JAVA_HOME/bin:$PATH
 
 
 
-zprof
+#zprof
