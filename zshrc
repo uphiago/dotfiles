@@ -178,6 +178,8 @@ alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo
 # Add hook to automatically change version after change directory
 #add-zsh-hook chpwd switchNode
 
+export PATH=/usr/local/go/bin:$PATH
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
