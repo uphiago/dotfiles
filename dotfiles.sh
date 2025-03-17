@@ -23,15 +23,17 @@ echo " Checking symbolic links..."
 for i in "${!HOME_LINKS[@]}"; do
     LINK="${HOME_LINKS[$i]}"
     TARGET="${REPO_LINKS[$i]}"
+    SHORT_LINK="${LINK/#$HOME/~}"
 
     if [ "$(readlink -f "$LINK" 2>/dev/null)" = "$(realpath "$TARGET")" ]; then
-        STATUS_REPORT+=("󰄬 OK        → ${LINK/#$HOME/~}")
+        STATUS_REPORT+=("󰄬 OK        → $SHORT_LINK")
     else
         mkdir -p "$(dirname "$LINK")"
         ln -sf "$TARGET" "$LINK"
-        STATUS_REPORT+=("󰅖 Fixed     → ${LINK/#$HOME/~}")
+        STATUS_REPORT+=("󰅖 Fixed     → $SHORT_LINK")
     fi
 done
+
 
 echo -e "\n󰊢 Syncing Git repository..."
 
