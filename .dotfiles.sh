@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
 DOTFILE_LINK="$HOME/.dotfiles.sh"
 
 if [ ! -L "$DOTFILE_LINK" ] || [ "$(readlink -f "$DOTFILE_LINK")" != "$REPO/.dotfiles.sh" ]; then
