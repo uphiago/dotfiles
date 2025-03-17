@@ -7,7 +7,7 @@ STATUS_REPORT=()
 echo " Scanning and linking dotfiles from: $REPO"
 
 while IFS= read -r -d '' FILE; do
-    REL_PATH="${FILE#$REPO/}"                 # strip repo base path
+    REL_PATH="${FILE#$REPO/}"
     TARGET="$FILE"
     LINK="$HOME/$REL_PATH"
     SHORT_LINK="${LINK/#$HOME/~}"
@@ -19,7 +19,7 @@ while IFS= read -r -d '' FILE; do
         ln -sf "$TARGET" "$LINK"
         STATUS_REPORT+=("󰅖 Linked    → $SHORT_LINK")
     fi
-done < <(find "$REPO" -type f -print0)
+done < <(find "$REPO" -path "$REPO/.git*" -prune -o -type f -print0)
 
 echo -e "\n󰊢 Syncing Git repository..."
 
