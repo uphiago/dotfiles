@@ -19,7 +19,7 @@ while IFS= read -r -d '' FILE; do
         ln -sf "$TARGET" "$LINK"
         STATUS_REPORT+=("󰅖 Linked    → $SHORT_LINK")
     fi
-done < <(find "$REPO" -path "$REPO/.git*" -prune -o -type f -print0)
+done < <(find "$REPO" -type d -name .git -prune -o -type f -print0)
 
 echo -e "\n󰊢 Syncing Git repository..."
 
