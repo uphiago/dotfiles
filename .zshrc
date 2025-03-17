@@ -139,44 +139,6 @@ alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && 
 alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall'
 alias ff='fastfetch'
 
-#Virtualbox
-#alias govm1="ssh volks@127.0.0.1 -p 2222"
-#alias vms="VBoxManage list runningvms"
-
-###### Old nvm configs
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
-###### New nvm configs
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" --no-use
-
-#lazy loading Node from .nvmrc
-#NODE_DEFAULT_PATH="${NVM_DIR}/versions/default/bin"
-#PATH="${NODE_DEFAULT_PATH}:${PATH}"
-
-#switchNode() {
-#  local NODE_PATH TARGET_NODE_VERSION
-#  if [ -f '.nvmrc' ]; then
-#    TARGET_NODE_VERSION="$(nvm version $(cat .nvmrc))"
-#    NODE_PATH="${NVM_DIR}/versions/node/${TARGET_NODE_VERSION}/bin"
-#  else
-#    TARGET_NODE_VERSION="$(nvm version default)"
-#    NODE_PATH="${NODE_DEFAULT_PATH}"
-#  fi
-#
-#  # Remove old Node.js PATH
-#  PATH=$(echo $PATH | sed -e "s|${NVM_DIR}/versions/node/[^/]*/bin:||g")
-#
-#  # Add new NODE_PATH to PATH if =! version
-#  if [ "${TARGET_NODE_VERSION}" != "$(nvm current)" ]; then
-#    PATH="${NODE_PATH}:${PATH}"
-#  fi
-#}
-
-# Add hook to automatically change version after change directory
-#add-zsh-hook chpwd switchNode
 
 #export PATH=/usr/local/go/bin:$PATH
 
@@ -189,11 +151,11 @@ alias ff='fastfetch'
 
 
 
-#zprof
-
 # fnm
 FNM_PATH="/home/iceteash/.local/share/fnm"
 if [ -d "$FNM_PATH" ]; then
   export PATH="/home/iceteash/.local/share/fnm:$PATH"
-  eval "`fnm env`"
+  eval "$(fnm env --use-on-cd)"
 fi
+
+#zprof
