@@ -43,7 +43,7 @@ else
     STATUS_REPORT+=("󰝦 No changes to commit")
 fi
 
-echo -e "\n Final Report:"
+echo -e "\n Final Reports:"
 for line in "${STATUS_REPORT[@]}"; do
     echo "$line"
 done
