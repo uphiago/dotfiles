@@ -125,9 +125,6 @@ alias pret="npx prettier --write ."
 alias nrbd="npm install && npm run build && npm run start"
 alias nrbdi="npm install && npm run build && npm run dev"
 alias 0="xdg-open . && exit"
-alias zload="source ~/.zshrc && bash ~/.dotfiles.sh"
-alias zconf="nano ~/.zshrc"
-alias aconf="sudo nano $HOME/.config/alacritty/alacritty.toml"
 alias repo="cd ~/Repositories && ls"
 alias hist="history | less"
 alias now="date +'%Y-%m-%d %H:%M:%S'"
@@ -137,7 +134,13 @@ alias npmglobal="npm list -g --depth 0"
 alias fastpush="git add "updates" && git commit -m . && git push"
 alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && docker rm \$(docker ps -aq); docker images -q | grep -q . && docker rmi \$(docker images -q) -f; docker volume prune -f && docker network prune -f && docker system prune -af --volumes"
 alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall'
+
+#dot files and system
 alias ff='fastfetch'
+alias zload="source ~/.zshrc && bash ~/.dotfiles.sh"
+alias zconf="nano ~/.zshrc"
+alias aconf="sudo nano $HOME/.config/alacritty/alacritty.toml"
+alias ffconf="sudo nano ~/.config/fastfetch/config.jsonc"
 
 #Virtualbox
 #alias govm1="ssh volks@127.0.0.1 -p 2222"
