@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="$HOME/Repositories/devops/dotfiles"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILE_LINK="$HOME/.dotfiles.sh"
+
+if [ ! -L "$DOTFILE_LINK" ] || [ "$(readlink -f "$DOTFILE_LINK")" != "$REPO/.dotfiles.sh" ]; then
+    echo "󰅖 Creating symlink: $DOTFILE_LINK → $REPO/.dotfiles.sh"
+    ln -sf "$REPO/.dotfiles.sh" "$DOTFILE_LINK"
+fi
+
 STATUS_REPORT=()
 
 echo " Scanning and linking dotfiles from: $REPO"
