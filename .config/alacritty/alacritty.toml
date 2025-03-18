@@ -157,9 +157,10 @@ history = 10000
 
 [window]
 dynamic_padding = false
-opacity = 0.96
+opacity = 0.2
 title = ""
 decorations = "none"
+blur = true
 
 [window.dimensions]
 columns = 100
