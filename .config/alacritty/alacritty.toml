@@ -1,6 +1,6 @@
 [terminal.shell]
 program = "tmux"
-args = ["new-session", "-A", "-s", "default"]
+#args = ["new-session", "-A", "-s", "default"]
 
 [window.position]
 x = 120
@@ -157,7 +157,7 @@ history = 10000
 
 [window]
 dynamic_padding = false
-opacity = 0.2
+opacity = 0.8
 title = ""
 decorations = "none"
 blur = true
