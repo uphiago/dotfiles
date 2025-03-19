@@ -1,6 +1,9 @@
+#[terminal.shell]
+#program = "tmux"
+#args = ["new-session", "-A", "-s", "main"]
 [terminal.shell]
 program = "tmux"
-args = ["new-session", "-A", "-s", "default"]
+args = ["attach"]
 
 [window.position]
 x = 120
