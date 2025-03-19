@@ -156,7 +156,7 @@ mode = "~Alt"
 mods = "Shift"
 
 [scrolling]
-history = 10000
+history = 100000
 
 [window]
 dynamic_padding = false
