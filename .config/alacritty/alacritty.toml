@@ -1,6 +1,6 @@
 [terminal.shell]
 program = "tmux"
-#args = ["new-session", "-A", "-s", "default"]
+args = ["new-session", "-A", "-s", "default"]
 
 [window.position]
 x = 120
