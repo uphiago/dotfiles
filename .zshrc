@@ -160,3 +160,4 @@ if [ -d "$FNM_PATH" ]; then
 fi
 
 #zprof
+export PATH=$PATH:/usr/local/go/bin
