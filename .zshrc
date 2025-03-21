@@ -159,5 +159,6 @@ if [ -d "$FNM_PATH" ]; then
   eval "$(fnm env --use-on-cd)"
 fi
 
-#zprof
 export PATH=$PATH:/usr/local/go/bin
+
+#zprof
