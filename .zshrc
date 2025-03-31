@@ -1,6 +1,6 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-#zmodload zsh/zprof
+zmodload zsh/zprof
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -135,7 +135,7 @@ alias now="date +'%Y-%m-%d %H:%M:%S'"
 alias tarup="tar -czvf"
 alias untar="tar -xzvf"
 alias npmglobal="npm list -g --depth 0"
-alias fastpush="git add 'updates' && git commit -m . && git push"
+#alias fastpush="git add . && git commit -m "basecode updates" && git push"
 alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && docker rm \$(docker ps -aq); docker images -q | grep -q . && docker rmi \$(docker images -q) -f; docker volume prune -f && docker network prune -f && docker system prune -af --volumes"
 #alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall'
 alias ff='fastfetch'
@@ -170,4 +170,4 @@ fi
 
 export PATH=$PATH:/usr/local/go/bin
 
-#zprof
+zprof
