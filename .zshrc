@@ -171,3 +171,10 @@ fi
 export PATH=$PATH:/usr/local/go/bin
 
 #zprof
+
+# bun completions
+[ -s "/home/iceteash/.bun/_bun" ] && source "/home/iceteash/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
