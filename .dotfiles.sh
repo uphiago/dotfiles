@@ -38,7 +38,17 @@ git stash pop  >/dev/null 2>&1 || true
 
 git add -A
 if git diff --cached --quiet; then
-    STATUS_REPORT+=("󰝦 No changes to commit")
+    # nothing new staged
+    if git status --porcelain=v2 --branch | grep -q 'ahead '; then
+        echo " Branch ahead – pushing outstanding commits…"
+        if git push origin main >/dev/null 2>&1; then
+            STATUS_REPORT+=(" Pushed pending commits")
+        else
+            STATUS_REPORT+=(" Push failed (check credentials)")
+        fi
+    else
+        STATUS_REPORT+=("󰝦 No changes to commit")
+    fi
 elif git config user.email &>/dev/null && git config user.name &>/dev/null; then
     git commit -m "Auto-update $(date +%F_%T)" >/dev/null
     if git push origin main >/dev/null 2>&1; then
@@ -47,7 +57,7 @@ elif git config user.email &>/dev/null && git config user.name &>/dev/null; then
         STATUS_REPORT+=(" Commit saved locally (push failed)")
     fi
 else
-    git reset                     # un-stage
+    git reset           # undo staged files
     STATUS_REPORT+=(" Git user.name/email not set – commit skipped")
 fi
 
