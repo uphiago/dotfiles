@@ -141,14 +141,13 @@ alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && 
 alias ff='fastfetch'
 #alias cursor='cursor --no-sandbox >/dev/null 2>&1 & disown'
 
-cursor() {
-    if [ $# -eq 0 ]; then
-        /usr/local/bin/cursor --no-sandbox >/dev/null 2>&1 & disown
-    else
-        /usr/local/bin/cursor --no-sandbox "$@" >/dev/null 2>&1 & disown
-    fi
-}
-
+#cursor() {
+#    if [ $# -eq 0 ]; then
+#        /usr/local/bin/cursor --no-sandbox >/dev/null 2>&1 & disown
+#    else
+#        /usr/local/bin/cursor --no-sandbox "$@" >/dev/null 2>&1 & disown
+#    fi
+#}
 
 #export PATH=/usr/local/go/bin:$PATH
 
@@ -158,8 +157,6 @@ cursor() {
 #
 #export JAVA_HOME=$(sdk home java 21.0.4-jbr)
 #export PATH=$JAVA_HOME/bin:$PATH
-
-
 
 # fnm
 FNM_PATH="/home/iceteash/.local/share/fnm"
@@ -179,18 +176,17 @@ export PATH=$PATH:/usr/local/go/bin
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/iceteash/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/iceteash/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/iceteash/miniconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/iceteash/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
+## >>> conda initialize >>>
+## !! Contents within this block are managed by 'conda init' !!
+#__conda_setup="$('/home/iceteash/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+#if [ $? -eq 0 ]; then
+#    eval "$__conda_setup"
+#else
+#    if [ -f "/home/iceteash/miniconda3/etc/profile.d/conda.sh" ]; then
+#        . "/home/iceteash/miniconda3/etc/profile.d/conda.sh"
+#    else
+#        export PATH="/home/iceteash/miniconda3/bin:$PATH"
+#    fi
+#fi
+#unset __conda_setup
+## <<< conda initialize <<<

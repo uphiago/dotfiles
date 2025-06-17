@@ -34,13 +34,21 @@ cd "$REPO" || { echo "󰅙 Failed to access $REPO"; exit 1; }
 
 git stash push -m "auto-stash before rebase" >/dev/null 2>&1 || true
 git pull --rebase origin main || true
-git stash pop >/dev/null 2>&1 || true
+git stash pop  >/dev/null 2>&1 || true
 
-git add .
-if git commit -m "Auto-update $(date +%F_%T)" >/dev/null 2>&1; then
-    git push origin main
-else
+git add -A
+if git diff --cached --quiet; then
     STATUS_REPORT+=("󰝦 No changes to commit")
+elif git config user.email &>/dev/null && git config user.name &>/dev/null; then
+    git commit -m "Auto-update $(date +%F_%T)" >/dev/null
+    if git push origin main >/dev/null 2>&1; then
+        STATUS_REPORT+=(" Pushed to origin/main")
+    else
+        STATUS_REPORT+=(" Commit saved locally (push failed)")
+    fi
+else
+    git reset                     # un-stage
+    STATUS_REPORT+=(" Git user.name/email not set – commit skipped")
 fi
 
 echo -e "\n Final Reports:"
