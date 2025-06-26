@@ -152,11 +152,11 @@ alias ff='fastfetch'
 #export PATH=/usr/local/go/bin:$PATH
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-#export SDKMAN_DIR="$HOME/.sdkman"
-#[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 #
-#export JAVA_HOME=$(sdk home java 21.0.4-jbr)
-#export PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME=$(sdk home java 21.0.4-jbr)
+export PATH=$JAVA_HOME/bin:$PATH
 
 # fnm
 FNM_PATH="/home/iceteash/.local/share/fnm"
