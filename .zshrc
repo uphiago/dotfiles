@@ -155,7 +155,7 @@ alias ff='fastfetch'
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 #
-export JAVA_HOME=$(sdk home java 21.0.4-jbr)
+export JAVA_HOME="$(sdk home java 21.0.7-tem)"
 export PATH=$JAVA_HOME/bin:$PATH
 
 # fnm
