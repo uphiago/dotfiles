@@ -190,3 +190,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 #fi
 #unset __conda_setup
 ## <<< conda initialize <<<
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/bin/terraform terraform
