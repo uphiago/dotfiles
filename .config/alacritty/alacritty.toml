@@ -1,9 +1,15 @@
 #[terminal.shell]
-#program = "tmux"
-#args = ["new-session", "-A", "-s", "main"]
-[terminal.shell]
-program = "tmux"
-args = ["attach"]
+#program = "/usr/bin/tmux"
+#args = ["attach"]
+[terminal]
+#shell = { program = "/usr/bin/tmux" }
+shell = { program = "/usr/bin/tmux", args = ["attach-session", "-t", "main"] }
+
+#[env]
+#TERM = "alacritty"
+[env]
+#TERM = "alacritty"
+SHELL = "/usr/bin/zsh"
 
 [window.position]
 x = 120
@@ -43,10 +49,6 @@ foreground = "#bbc2cf"
 [colors.selection]
 background = "#3e4451"
 text = "CellForeground"
-
-[env]
-TERM = "alacritty"
-#TERMINAL = "alacritty"
 
 [font]
 size = 9.5

@@ -5,12 +5,38 @@ DOTFILES_DIR="$HOME/.dotfiles"
 
 # --- Packages ----------------------------------------------------
 echo "Updating system…"
-sudo apt update && pkcon refresh && pkcon update -y
+sudo apt update && sudo apt upgrade -y
 
 echo "Installing essentials…"
 sudo apt install -y \
-  curl git zsh yq tmux fastfetch fzf ripgrep \
+  curl git zsh yq tmux fzf ripgrep \
   build-essential unzip fonts-powerline
+
+# --- Fastfetch ---------------------------------------------------
+if ! command -v fastfetch &>/dev/null; then
+  echo "Installing fastfetch…"
+  FASTFETCH_URL=$(curl -s https://api.github.com/repos/fastfetch-cli/fastfetch/releases/latest | grep "browser_download_url.*amd64.deb" | cut -d '"' -f 4)
+  wget -q "$FASTFETCH_URL" -O /tmp/fastfetch.deb
+  sudo dpkg -i /tmp/fastfetch.deb
+  rm /tmp/fastfetch.deb
+fi
+
+# --- Rust --------------------------------------------------------
+if ! command -v rustc &>/dev/null; then
+  echo "Installing Rust…"
+  RUSTUP_INIT_SKIP_PATH_CHECK=yes curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+  source "$HOME/.cargo/env"
+  #sudo apt install -y cargo
+fi
+
+# --- Alacritty dependencies --------------------------------------
+if [ ! -d alacritty ]; then
+  echo "Installing Alacritty build dependencies…"
+  sudo apt install -y \
+    cmake pkg-config libfreetype6-dev libfontconfig1-dev libfontconfig-dev \
+    libxcb-xfixes0-dev libxkbcommon-dev python3
+fi
+
 
 # --- Alacritty ---------------------------------------------------
 echo "Checking Alacritty…"
@@ -23,18 +49,10 @@ sudo desktop-file-install extra/linux/Alacritty.desktop 2>/dev/null || true
 sudo update-desktop-database 2>/dev/null || true
 popd >/dev/null
 
-# --- Rust --------------------------------------------------------
-if ! command -v rustc &>/dev/null; then
-  echo "Installing Rust…"
-  RUSTUP_INIT_SKIP_PATH_CHECK=yes curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-  source "$HOME/.cargo/env"
-  sudo apt install -y cargo
-fi
-
 # --- Oh-My-Zsh ---------------------------------------------------
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
   echo "Installing Oh-My-Zsh…"
-  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+  RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
 
 # --- VS Code -----------------------------------------------------
@@ -52,10 +70,10 @@ echo "Syncing dotfiles…"
 [ ! -d "$DOTFILES_DIR" ] && git clone "$DOTFILES_REPO" "$DOTFILES_DIR"
 
 mkdir -p "$HOME/.config/alacritty" "$HOME/.config/fastfetch"
-ln -sf "$DOTFILES_DIR/.zshrc"                       "$HOME/.zshrc"
-ln -sf "$DOTFILES_DIR/.tmux.conf"                   "$HOME/.tmux.conf"
-ln -sf "$DOTFILES_DIR/.config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
-ln -sf "$DOTFILES_DIR/.config/fastfetch/config.jsonc"   "$HOME/.config/fastfetch/config.jsonc"
+[ -f "$DOTFILES_DIR/.zshrc" ] && ln -sf "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
+[ -f "$DOTFILES_DIR/.tmux.conf" ] && ln -sf "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+[ -f "$DOTFILES_DIR/.config/alacritty/alacritty.toml" ] && ln -sf "$DOTFILES_DIR/.config/alacritty/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
+[ -f "$DOTFILES_DIR/.config/fastfetch/config.jsonc" ] && ln -sf "$DOTFILES_DIR/.config/fastfetch/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
 
 # --- Nerd Font ---------------------------------------------------
 FONT_DIR="$HOME/.local/share/fonts"
@@ -102,7 +120,8 @@ done
 # --- Run dotfiles helper ----------------------------------------
 [ -x "$DOTFILES_DIR/.dotfiles.sh" ] && bash "$DOTFILES_DIR/.dotfiles.sh"
 
-# --- Reload Zsh if running --------------------------------------
-[ -n "$ZSH_VERSION" ] && source ~/.zshrc
+# Cleanup
+[ -d "$HOME/repositories/dotfiles/alacritty" ] && rm -rf "$HOME/repositories/dotfiles/alacritty"
 
 echo "Setup finished ✓"
+echo "Execute: exec zsh"

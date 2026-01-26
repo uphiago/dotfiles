@@ -129,7 +129,7 @@ alias zload="source ~/.zshrc && bash ~/.dotfiles.sh"
 alias zconf="nano ~/.zshrc"
 alias aconf="sudo nano $HOME/.config/alacritty/alacritty.toml"
 alias tmconf="sudo nano $HOME/.tmux.conf"
-alias repo="cd ~/Repositories && ls"
+alias repo="cd ~/repositories && ls"
 alias hist="history | less"
 alias now="date +'%Y-%m-%d %H:%M:%S'"
 alias tarup="tar -czvf"
@@ -140,6 +140,14 @@ alias dockererase="docker ps -q | grep -q . && docker stop \$(docker ps -aq) && 
 #alias upgrade='sudo apt update && sudo apt upgrade -y --allow-downgrades && sudo apt dist-upgrade -y && sudo apt full-upgrade -y && sudo apt autoremove -y && sudo apt autoclean && sudo apt clean && sudo dpkg --configure -a && sudo apt install -f && sudo ubuntu-drivers autoinstall'
 alias ff='fastfetch'
 #alias cursor='cursor --no-sandbox >/dev/null 2>&1 & disown'
+# Troca o ls chato pelo lsd
+alias ls='lsd'
+# Atalho para listar em lista detalhada (ll)
+alias ll='lsd -l'
+# Atalho para listar tudo, inclusive ocultos (la)
+alias la='lsd -a'
+# Atalho para ver a árvore de arquivos (lt)
+alias lt='lsd --tree'
 
 #cursor() {
 #    if [ $# -eq 0 ]; then
@@ -152,29 +160,29 @@ alias ff='fastfetch'
 #export PATH=/usr/local/go/bin:$PATH
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+#export SDKMAN_DIR="$HOME/.sdkman"
+#[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 #
-export JAVA_HOME="$(sdk home java 21.0.7-tem)"
-export PATH=$JAVA_HOME/bin:$PATH
+#export JAVA_HOME="$(sdk home java 21.0.7-tem)"
+#export PATH=$JAVA_HOME/bin:$PATH
 
 # fnm
-FNM_PATH="/home/iceteash/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="/home/iceteash/.local/share/fnm:$PATH"
-  eval "$(fnm env --use-on-cd)"
-fi
+#FNM_PATH="/home/iceteash/.local/share/fnm"
+#if [ -d "$FNM_PATH" ]; then
+#  export PATH="/home/iceteash/.local/share/fnm:$PATH"
+#  eval "$(fnm env --use-on-cd)"
+#fi
 
-export PATH=$PATH:/usr/local/go/bin
+#export PATH=$PATH:/usr/local/go/bin
 
 #zprof
 
 # bun completions
-[ -s "/home/iceteash/.bun/_bun" ] && source "/home/iceteash/.bun/_bun"
+#[ -s "/home/iceteash/.bun/_bun" ] && source "/home/iceteash/.bun/_bun"
 
 # bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
+#export BUN_INSTALL="$HOME/.bun"
+#export PATH="$BUN_INSTALL/bin:$PATH"
 
 ## >>> conda initialize >>>
 ## !! Contents within this block are managed by 'conda init' !!
@@ -193,3 +201,25 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/bin/terraform terraform
+
+# fnm
+FNM_PATH="/home/hiago/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
+
+. "$HOME/.atuin/bin/env"
+
+eval "$(atuin init zsh)"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPTS="--height 75% --layout=reverse --border --preview 'batcat --style=numbers --color=always --line-range :500 {}'"
+export BAT_THEME="Github"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# opencode
+export PATH=/home/hiago/.opencode/bin:$PATH
+
+# Added by git-ai installer on Mon Jan 26 01:26:28 PM -03 2026
+export PATH="/home/hiago/.git-ai/bin:$PATH"
