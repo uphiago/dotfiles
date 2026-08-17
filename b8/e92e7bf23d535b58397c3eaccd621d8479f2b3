@@ -1,0 +1,20 @@
+.config/alacritty/alacritty.toml
+  h_103ddee278e95c 6,166,190-191
+.tmux.conf
+  h_103ddee278e95c 5,8-14
+.zshrc
+  h_103ddee278e95c 152-154,229-243
+.zshrc.bak.1786628969
+  h_103ddee278e95c 1-237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.22",
+  "base_commit_sha": "b8e92e7bf23d535b58397c3eaccd621d8479f2b3",
+  "prompts": {},
+  "humans": {
+    "h_103ddee278e95c": {
+      "author": "uphiago <hollyvolks@hotmail.com>"
+    }
+  }
+}
