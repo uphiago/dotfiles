@@ -149,6 +149,9 @@ alias la='lsd -a'
 # Atalho para ver a árvore de arquivos (lt)
 alias lt='lsd --tree'
 
+#Troca de circuito Tor e exibe novo IP
+alias newtor='echo "Old Tor IP: $(sudo proxy-ns curl -s ifconfig.me)" && echo -e "AUTHENTICATE\r\nSIGNAL NEWNYM" | nc -w1 127.0.0.1 9051 > /dev/null && sleep 2 && echo "New Tor IP: $(sudo proxy-ns curl -s ifconfig.me)"'
+
 #cursor() {
 #    if [ $# -eq 0 ]; then
 #        /usr/local/bin/cursor --no-sandbox >/dev/null 2>&1 & disown
@@ -223,3 +226,18 @@ export PATH=/home/hiago/.opencode/bin:$PATH
 
 # Added by git-ai installer on Mon Jan 26 01:26:28 PM -03 2026
 export PATH="/home/hiago/.git-ai/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+export PATH=/usr/local/go/bin:$PATH
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Bug-bounty engagement scaffolding (bug-bounty-claude-skills)
+source ~/.claude/scripts/hunt.sh
+
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+fpath=(~/.grok/completions/zsh $fpath)
+autoload -Uz compinit && compinit -C
+# <<< grok installer <<<
