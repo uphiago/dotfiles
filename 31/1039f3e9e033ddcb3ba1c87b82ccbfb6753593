@@ -1,0 +1,14 @@
+.config/alacritty/alacritty.toml
+  h_103ddee278e95c 166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "311039f3e9e033ddcb3ba1c87b82ccbfb6753593",
+  "prompts": {},
+  "humans": {
+    "h_103ddee278e95c": {
+      "author": "uphiago <hollyvolks@hotmail.com>"
+    }
+  }
+}
