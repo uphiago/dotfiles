@@ -20,7 +20,7 @@ WSL (Ubuntu 26.04) + Windows. Repo público: nada de chave, token ou IP aqui.
 
 ## Reinstalação
 
-1. Windows: `winget import -i inventory\winget-apps.json --accept-package-agreements`
+1. Windows: `winget import -i inventory\winget-apps.json --accept-package-agreements`, depois `inventory\winget-extra.json`; o resto está em `inventory/windows-manual-apps.md`
 2. `wsl --install -d Ubuntu-26.04`, depois `sudo cp wsl/wsl.conf /etc/wsl.conf`
 3. Restaurar `~/.ssh` e credenciais do backup offline
 4. `bash setup-terminal.sh` (apt, oh-my-zsh, tmux, rust...) e `bash .dotfiles.sh`
