@@ -12,6 +12,8 @@ WSL (Ubuntu 26.04) + Windows. Repo público: nada de chave, token ou IP aqui.
 | `.config/alacritty/alacritty.toml` | `%APPDATA%\alacritty\alacritty.toml` | copiar (Alacritty roda no Windows) |
 | `windows/windows-terminal/settings.json` | `%LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\` | copiar |
 | `windows/powershell/*.ps1` | `$PROFILE` (`Documentos\WindowsPowerShell\`) | copiar; chama `fastfetch` (config padrão) e define alias `btop`/função `wsl` |
+| `windows/flameshot/flameshot.ini` | `%APPDATA%\flameshot\` | copiar |
+| `windows/altsnap/AltSnap.ini` | `%APPDATA%\AltSnap\` | copiar |
 | `windows/vscode/settings.json` | `%APPDATA%\Code\User\` | copiar ou Settings Sync |
 | `ssh/config.example` | `~/.ssh/config` | copiar e trocar `<OVH_SERVER_IP>` |
 | `inventory/` | — | lista do que estava instalado |
