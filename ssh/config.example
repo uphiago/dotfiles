@@ -1,0 +1,24 @@
+Host github.com
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_ed25519
+
+Host ovh
+    HostName <OVH_SERVER_IP>
+    User ubuntu
+    IdentityFile ~/.ssh/id_rsa
+    LocalForward 127.0.0.1:9119 127.0.0.1:9119
+    ExitOnForwardFailure yes
+   # ControlPath ~/.ssh/control-%C
+   # ControlPersist 10m
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+Host ovh-browser
+    HostName <OVH_SERVER_IP>
+    User ubuntu
+    IdentityFile ~/.ssh/ovh-browser
+    IdentitiesOnly yes
+    StrictHostKeyChecking yes
+    ExitOnForwardFailure yes
+    ServerAliveInterval 30
+    ServerAliveCountMax 3

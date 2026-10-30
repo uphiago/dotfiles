@@ -127,9 +127,9 @@ alias nrbdi="npm install && npm run build && npm run dev"
 alias 0="xdg-open . && exit"
 alias zload="source ~/.zshrc && bash ~/.dotfiles.sh"
 alias zconf="nano ~/.zshrc"
-alias aconf="sudo nano $HOME/.config/alacritty/alacritty.toml"
-alias tmconf="sudo nano $HOME/.tmux.conf"
-alias repo="cd ~/repositories && ls"
+alias aconf='nano /mnt/c/Users/preda/AppData/Roaming/alacritty/alacritty.toml'
+alias tmconf="nano $HOME/.tmux.conf"
+alias repo="cd ~/Repositories && ls"
 alias hist="history | less"
 alias now="date +'%Y-%m-%d %H:%M:%S'"
 alias tarup="tar -czvf"
@@ -202,30 +202,33 @@ alias newtor='echo "Old Tor IP: $(sudo proxy-ns curl -s ifconfig.me)" && echo -e
 #unset __conda_setup
 ## <<< conda initialize <<<
 
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/bin/terraform terraform
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 
-# fnm
-FNM_PATH="/home/hiago/.local/share/fnm"
-if [ -d "$FNM_PATH" ]; then
-  export PATH="$FNM_PATH:$PATH"
-  eval "`fnm env`"
+autoload -U +X bashcompinit && bashcompinit
+if command -v terraform >/dev/null 2>&1; then
+  complete -o nospace -C "$(command -v terraform)" terraform
 fi
 
-. "$HOME/.atuin/bin/env"
+# fnm
+FNM_PATH="$HOME/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --use-on-cd)"
+fi
 
-eval "$(atuin init zsh)"
+[[ -f "$HOME/.atuin/bin/env" ]] && source "$HOME/.atuin/bin/env"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+command -v atuin >/dev/null 2>&1 && eval "$(atuin init zsh)"
+
+if command -v fzf >/dev/null 2>&1; then
+  eval "$(fzf --zsh)"
+fi
 export FZF_DEFAULT_OPTS="--height 75% --layout=reverse --border --preview 'batcat --style=numbers --color=always --line-range :500 {}'"
-export BAT_THEME="Github"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export BAT_THEME="GitHub"
+export MANPAGER="sh -c 'col -bx | batcat -l man -p'"
 
 # opencode
-export PATH=/home/hiago/.opencode/bin:$PATH
-
-# Added by git-ai installer on Mon Jan 26 01:26:28 PM -03 2026
-export PATH="/home/hiago/.git-ai/bin:$PATH"
+[[ -d "$HOME/.opencode/bin" ]] && export PATH="$HOME/.opencode/bin:$PATH"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
@@ -233,11 +236,29 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH=/usr/local/go/bin:$PATH
 export PATH="$HOME/.cargo/bin:$PATH"
 
-# Bug-bounty engagement scaffolding (bug-bounty-claude-skills)
-source ~/.claude/scripts/hunt.sh
+# BEGIN ALACRITTY STARTUP DIAGNOSTICS
+# Registra somente o primeiro prompt de cada shell durante o teste.
+zmodload zsh/datetime
+autoload -Uz add-zsh-hook
+_alacritty_first_prompt_log() {
+  local boot_id uptime_line
+  IFS= read -r boot_id < /proc/sys/kernel/random/boot_id
+  IFS= read -r uptime_line < /proc/uptime
+  printf 'epoch=%s pid=%s boot_id=%s uptime=%s tmux=%s cwd=%s\n' \
+    "$EPOCHREALTIME" "$$" "$boot_id" "$uptime_line" "${TMUX:-none}" "$PWD" \
+    >> "$HOME/.local/state/alacritty-startup/zsh-first-prompt.log"
+  add-zsh-hook -d precmd _alacritty_first_prompt_log
+  unfunction _alacritty_first_prompt_log
+}
+add-zsh-hook precmd _alacritty_first_prompt_log
+# END ALACRITTY STARTUP DIAGNOSTICS
 
-# >>> grok installer >>>
-export PATH="$HOME/.grok/bin:$PATH"
-fpath=(~/.grok/completions/zsh $fpath)
-autoload -Uz compinit && compinit -C
-# <<< grok installer <<<
+# opencode
+export PATH=/home/volks/.opencode/bin:$PATH
+
+# fnm
+FNM_PATH="/home/volks/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell zsh)"
+fi

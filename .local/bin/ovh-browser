@@ -1,0 +1,282 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+port=1080
+debug_port="${OVH_BROWSER_DEBUG_PORT:-9222}"
+state_dir="$HOME/.local/share/ovh-browser"
+ready_file="$state_dir/ready"
+session_pid_file="$state_dir/session.pid"
+browser_pid_file="$state_dir/browser.pid"
+tunnel_pid_file="$state_dir/tunnel.pid"
+session_log="$state_dir/session.log"
+browser_log="$state_dir/browser.log"
+tunnel_log="$state_dir/tunnel.log"
+
+usage() {
+    cat >&2 <<'EOF'
+Uso: ovh-browser [--normal|--incognito|--install-adblock|--headless|--stop] [URL...]
+
+  --normal  (default) abre o navegador normal, em background (libera o terminal)
+  --incognito          idem, em janela anônima
+  --install-adblock    abre a loja do uBlock Origin Lite
+  --headless           roda sem interface (DevTools em 127.0.0.1:9222)
+  --stop               encerra a sessão (browser + túnel)
+EOF
+}
+
+find_browser() {
+    local candidate
+    browser="${OVH_BROWSER_BIN:-}"
+    if [[ -z "$browser" ]]; then
+        for candidate in \
+            '/mnt/c/Program Files/Google/Chrome/Application/chrome.exe' \
+            '/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe' \
+            '/mnt/c/Program Files/Microsoft/Edge/Application/msedge.exe' \
+            '/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'; do
+            if [[ -x "$candidate" ]]; then
+                browser="$candidate"
+                break
+            fi
+        done
+    fi
+    if [[ -z "$browser" ]]; then
+        echo 'Chrome/Edge não encontrado no Windows; defina OVH_BROWSER_BIN.' >&2
+        exit 127
+    fi
+}
+
+browser_profile() {
+    # $1: 1 = headless, 0 = gráfico
+    if [[ "$browser" == *.exe ]]; then
+        local local_app_data
+        local_app_data="$(powershell.exe -NoProfile -Command '[Environment]::GetFolderPath("LocalApplicationData")' | tr -d '\r\n')"
+        [[ -n "$local_app_data" ]] || { echo 'Não consegui obter LocalAppData do Windows.' >&2; exit 1; }
+        if [[ "$1" == 1 ]]; then
+            printf '%s' "${local_app_data}\\OvhBrowserHeadless"
+        else
+            printf '%s' "${local_app_data}\\OvhBrowser"
+        fi
+    else
+        mkdir -p "$HOME/.local/share"
+        if [[ "$1" == 1 ]]; then
+            printf '%s' "$HOME/.local/share/chrome-ovh-headless"
+        else
+            printf '%s' "$HOME/.local/share/chrome-ovh"
+        fi
+    fi
+}
+
+chrome_regex() {
+    # $1: 1 = headless, 0 = gráfico
+    if [[ "$1" == 1 ]]; then
+        printf '%s' 'OvhBrowserHeadless'
+    else
+        printf '%s' 'OvhBrowser(?!Headless)'
+    fi
+}
+
+stop_browser_processes() {
+    # $1: regex do perfil; encerra chrome/msedge do Windows com esse perfil
+    command -v powershell.exe >/dev/null 2>&1 || return 0
+    local regex="$1" ps enc
+    ps="Get-CimInstance Win32_Process | Where-Object { \$_.Name -match '^(chrome|msedge)\.exe\$' -and \$_.CommandLine -match '$regex' } | ForEach-Object { Stop-Process -Id \$_.ProcessId -Force }"
+    enc="$(printf '%s' "$ps" | iconv -t UTF-16LE | base64 -w0)"
+    powershell.exe -NoProfile -EncodedCommand "$enc" >/dev/null 2>&1 || true
+}
+
+browser_running() {
+    # $1: pid WSL, $2: 1 = headless, 0 = gráfico
+    if [[ "$browser" != *.exe ]]; then
+        kill -0 "$1" 2>/dev/null
+        return
+    fi
+    command -v powershell.exe >/dev/null 2>&1 || return 1
+    local regex ps enc
+    regex="$(chrome_regex "$2")"
+    ps="if (Get-CimInstance Win32_Process | Where-Object { \$_.Name -match '^(chrome|msedge)\.exe\$' -and \$_.CommandLine -match '$regex' }) { exit 0 } else { exit 1 }"
+    enc="$(printf '%s' "$ps" | iconv -t UTF-16LE | base64 -w0)"
+    powershell.exe -NoProfile -EncodedCommand "$enc" >/dev/null 2>&1
+}
+
+session_running() {
+    [[ -f "$session_pid_file" ]] || return 1
+    local pid
+    pid="$(cat "$session_pid_file" 2>/dev/null || true)"
+    [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null
+}
+
+start_session() {
+    if session_running; then
+        echo 'Já existe uma sessão em execução (use: ovh-browser --stop).' >&2
+        exit 1
+    fi
+    mkdir -p "$state_dir"
+    rm -f "$ready_file" "$browser_pid_file" "$tunnel_pid_file"
+    setsid "$0" __session "$@" >"$session_log" 2>&1 </dev/null &
+    local spid=$!
+    echo "$spid" >"$session_pid_file"
+    local i
+    for i in {1..80}; do
+        [[ -f "$ready_file" ]] && break
+        kill -0 "$spid" 2>/dev/null || break
+        sleep 0.25
+    done
+    if [[ -f "$ready_file" ]]; then
+        cat "$ready_file"
+        printf 'Logs: %s | %s\n' "$browser_log" "$tunnel_log"
+        return 0
+    fi
+    echo 'Falha ao iniciar a sessão:' >&2
+    tail -n 20 "$session_log" >&2 || true
+    exit 1
+}
+
+stop_session() {
+    stop_browser_processes 'OvhBrowser(Headless)?'
+    if [[ -f "$session_pid_file" ]]; then
+        local spid i
+        spid="$(cat "$session_pid_file" 2>/dev/null || true)"
+        for i in {1..20}; do
+            kill -0 "$spid" 2>/dev/null || break
+            sleep 0.25
+        done
+        if kill -0 "$spid" 2>/dev/null; then
+            kill "$spid" 2>/dev/null || true
+            sleep 1
+        fi
+    fi
+    if [[ -f "$browser_pid_file" ]]; then
+        kill "$(cat "$browser_pid_file" 2>/dev/null || true)" 2>/dev/null || true
+    fi
+    if [[ -f "$tunnel_pid_file" ]]; then
+        kill "$(cat "$tunnel_pid_file" 2>/dev/null || true)" 2>/dev/null || true
+    fi
+    rm -f "$ready_file" "$session_pid_file" "$browser_pid_file" "$tunnel_pid_file"
+    echo 'Sessão encerrada.'
+}
+
+run_session() {
+    local kind="${1:---normal}"
+    shift || true
+    local headless=0
+    local -a chrome_mode=() start_page=("$@")
+    if [[ "$kind" == "--headless" ]]; then
+        headless=1
+        (( ${#start_page[@]} )) || start_page=(about:blank)
+    else
+        case "$kind" in
+            --incognito) chrome_mode=(--incognito) ;;
+            --install-adblock)
+                start_page=('https://chromewebstore.google.com/detail/ublock-origin-lite/ddkjiahejlhfcafbddmgiahcphecmpfh')
+                ;;
+            --normal) ;;
+        esac
+    fi
+
+    mkdir -p "$state_dir"
+    rm -f "$ready_file" "$browser_pid_file" "$tunnel_pid_file"
+    find_browser
+    local profile
+    profile="$(browser_profile "$headless")"
+
+    ssh -o ControlMaster=no -o ControlPath=none -o ExitOnForwardFailure=yes \
+        -N -D "127.0.0.1:$port" ovh-browser 2>"$tunnel_log" &
+    tunnel=$!
+    echo "$tunnel" >"$tunnel_pid_file"
+
+    cleanup() {
+        kill "$tunnel" 2>/dev/null || true
+        wait "$tunnel" 2>/dev/null || true
+        if [[ -f "$browser_pid_file" ]]; then
+            kill "$(cat "$browser_pid_file" 2>/dev/null || true)" 2>/dev/null || true
+        fi
+        rm -f "$ready_file" "$session_pid_file" "$browser_pid_file" "$tunnel_pid_file"
+    }
+    trap cleanup EXIT
+    trap 'exit 129' HUP
+    trap 'exit 130' INT
+    trap 'exit 143' TERM
+
+    local ip=""
+    local i
+    for i in {1..40}; do
+        if ! kill -0 "$tunnel" 2>/dev/null; then
+            echo 'Túnel SSH encerrou' >&2
+            tail -n 20 "$tunnel_log" >&2 || true
+            exit 1
+        fi
+        if ip="$(curl -fsS --max-time 1 \
+            --proxy "socks5h://127.0.0.1:$port" https://api.ipify.org 2>/dev/null)"; then
+            break
+        fi
+        sleep 0.25
+    done
+    if [[ -z "$ip" ]]; then
+        echo 'Proxy SOCKS não ficou pronto' >&2
+        tail -n 20 "$tunnel_log" >&2 || true
+        exit 1
+    fi
+
+    {
+        printf 'Saída pública: %s\n' "$ip"
+        if (( headless )); then
+            printf 'Headless: DevTools em http://127.0.0.1:%s (perfil: %s)\n' "$debug_port" "$profile"
+            printf 'Páginas: %s\n' "${start_page[*]}"
+        else
+            printf 'Navegador aberto (perfil: %s)\n' "$profile"
+        fi
+        printf 'Encerrar: ovh-browser --stop (fechar o navegador também finaliza)\n'
+    } >"$ready_file"
+
+    if (( headless )); then
+        "$browser" --headless=new \
+            --remote-debugging-port="$debug_port" \
+            --user-data-dir="$profile" \
+            --no-first-run \
+            --disable-background-networking \
+            --proxy-server="socks5://127.0.0.1:$port" \
+            --disable-quic \
+            --force-webrtc-ip-handling-policy=disable_non_proxied_udp \
+            "${start_page[@]}" >"$browser_log" 2>&1 &
+    else
+        "$browser" "${chrome_mode[@]}" \
+            --user-data-dir="$profile" \
+            --no-first-run \
+            --proxy-server="socks5://127.0.0.1:$port" \
+            --disable-quic \
+            --force-webrtc-ip-handling-policy=disable_non_proxied_udp \
+            "${start_page[@]}" >"$browser_log" 2>&1 &
+    fi
+    bpid=$!
+    echo "$bpid" >"$browser_pid_file"
+
+    while :; do
+        sleep 2
+        if ! kill -0 "$tunnel" 2>/dev/null; then
+            echo 'Túnel SSH caiu; encerrando o navegador.' >&2
+            stop_browser_processes "$(chrome_regex "$headless")"
+            break
+        fi
+        if ! browser_running "$bpid" "$headless"; then
+            break
+        fi
+    done
+}
+
+if [[ "${1:-}" == "__session" ]]; then
+    shift
+    run_session "$@"
+    exit 0
+fi
+
+mode="${1:---normal}"
+if (( $# > 0 )); then
+    shift
+fi
+
+case "$mode" in
+    --headless) start_session --headless "$@" ;;
+    --normal|--incognito|--install-adblock) start_session "$mode" "$@" ;;
+    --stop) stop_session ;;
+    *) usage; exit 2 ;;
+esac

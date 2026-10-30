@@ -4,7 +4,7 @@
 [terminal]
 #shell = { program = "/usr/bin/tmux" }
 osc52 = "OnlyCopy"
-shell = { program = "/usr/bin/tmux", args = ["attach-session", "-t", "main"] }
+shell = { program = "wsl.exe", args = ["-d", "Ubuntu-26.04", "--cd", "/home/volks", "--", "/usr/bin/tmux", "new-session", "-A", "-s", "main", "-c", "/home/volks"] }
 
 #[env]
 #TERM = "alacritty"
@@ -13,10 +13,11 @@ shell = { program = "/usr/bin/tmux", args = ["attach-session", "-t", "main"] }
 SHELL = "/usr/bin/zsh"
 
 [window.position]
-x = 120
-y = 80
+x = 924
+y = 452
 
 [colors]
+transparent_background_colors = true
 draw_bold_text_with_bright_colors = true
 
 [colors.bright]
@@ -52,7 +53,7 @@ background = "#3e4451"
 text = "CellForeground"
 
 [font]
-size = 9.5
+size = 10.5
 
 [font.bold]
 family = "JetBrainsMono Nerd Font"
@@ -163,7 +164,7 @@ history = 100000
 
 [window]
 dynamic_padding = false
-opacity = 1
+opacity = 0.98
 title = ""
 decorations = "none"
 blur = true
@@ -189,3 +190,10 @@ hide_when_typing = true
 
 #[selection]
 #save_to_clipboard = true
+
+# Logs temporários para medir a abertura após reiniciar.
+[debug]
+log_level = "Info"
+persistent_logging = true
+print_events = false
+render_timer = false

@@ -1,0 +1,15 @@
+{
+  "security.workspace.trust.untrustedFiles": "open",
+  "chat.hookFilesLocations": {
+    "~/.github/hooks": true
+  },
+  "chat.useHooks": true,
+  "docker.extension.enableComposeLanguageServer": false,
+  "github.copilot.chat.otel.dbSpanExporter.enabled": true,
+  "terminal.integrated.initialHint": false,
+  "explorer.confirmDelete": false,
+  "security.allowedUNCHosts": [
+    "wsl.localhost"
+  ],
+  "window.newWindowProfile": "volks"
+}

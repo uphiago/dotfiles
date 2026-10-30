@@ -1,0 +1,7 @@
+/home/volks/.local/share/fnm/node-versions/v24.21.0/installation/lib
+├── cf@1.0.0-beta.12
+├── corepack@0.36.0
+├── npm@11.19.0
+├── supabase@2.119.0
+└── vercel@62.2.0
+

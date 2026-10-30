@@ -1,0 +1,6 @@
+apkeep
+claude ⇒ /home/volks/.local/share/claude/versions/2.1.314
+codex ⇒ /home/volks/.codex/packages/standalone/current/bin/codex
+ovh-browser
+python3.13 ⇒ /home/volks/.local/share/uv/python/cpython-3.13-linux-x86_64-gnu/bin/python3.13
+terraform

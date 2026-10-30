@@ -1,0 +1,5 @@
+tmux-cpu
+tmux-nerd-font-window-name
+tmux-resurrect
+tmux-sensible
+tpm
